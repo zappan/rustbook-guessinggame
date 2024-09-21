@@ -1,5 +1,6 @@
 use rand::rngs::ThreadRng;
 use rand::Rng;
+use std::cmp::Ordering;
 use std::io::{self, Write};
 
 fn read_user_input() -> String {
@@ -28,16 +29,24 @@ fn game_round(rng: &mut ThreadRng) {
       .parse()
       .expect("Your guess must be a number between 1 and 100");
 
-    if guess == random {
-      break;
-    } else if guess < random {
-      println!("Your guess is too low.");
-    } else if guess > random {
-      println!("Your guess is too high.");
+    // if guess == random {
+    //   println!("Bravo! You guessed it!");
+    //   break;
+    // } else if guess < random {
+    //   println!("Your guess is too low.");
+    // } else if guess > random {
+    //   println!("Your guess is too high.");
+    // }
+
+    match guess.cmp(&random) {
+      Ordering::Less => println!("Your guess is too low."),
+      Ordering::Greater => println!("Your guess is too high."),
+      Ordering::Equal => {
+        println!("Bravo! You guessed it!");
+        break;
+      }
     }
   }
-
-  println!("Bravo! You guessed it!");
 }
 
 pub fn play_game() {
